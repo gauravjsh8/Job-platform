@@ -127,3 +127,9 @@ export const logoutUser = async (req, res) => {
     message: "User logged out successfully.",
   });
 };
+
+export const userProfile = async (req, res) => {
+  const userId = req.user.userId;
+  const user = await User.findById(userId);
+  res.json(user);
+};

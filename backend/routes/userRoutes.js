@@ -3,6 +3,7 @@ import {
   createUser,
   loginUser,
   logoutUser,
+  userProfile,
 } from "../controllers/userController.js";
 import upload from "../middleware/multer.js";
 import { authUser } from "../middleware/authMiddleware.js";
@@ -11,3 +12,4 @@ export const userRouter = express.Router();
 userRouter.post("/register", upload.single("photo"), createUser);
 userRouter.post("/login", loginUser);
 userRouter.post("/logout", authUser, logoutUser);
+userRouter.get("/user-profile", authUser, userProfile);

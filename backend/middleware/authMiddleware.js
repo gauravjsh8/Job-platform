@@ -9,7 +9,6 @@ export const authUser = async (req, res, next) => {
   try {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decodedToken;
-    console.log(decodedToken);
     next();
   } catch (error) {
     return res.status(403).json({ success: false, message: "Invalid token" });
