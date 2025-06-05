@@ -119,3 +119,15 @@ export const loginUser = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+export const logoutUser = async (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
+  });
+  return res.status(200).json({
+    success: true,
+    message: "User logged out successfully.",
+  });
+};
