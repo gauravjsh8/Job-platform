@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import { streamUpload } from "../utils/cloudinaryUpload.js";
 
@@ -87,12 +88,30 @@ export const loginUser = async (req, res) => {
       });
     }
 
+    const token = jwt.sign(
+      {
+        userId: existingUser._id,
+        email: existingUser.email,
+        role: existingUser.role,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN }
+    );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000,
+      secure: process.env.NODE_ENV === "production",
+    });
+
     const userResponse = existingUser.toObject();
 
     delete userResponse.password;
     return res.status(200).json({
       success: true,
-      message: "User loggedin successfully.",
+      message: "User logged in successfully.",
+      token,
       user: userResponse,
     });
   } catch (error) {
