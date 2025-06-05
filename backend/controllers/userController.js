@@ -1,8 +1,7 @@
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import User from "../models/userModel.js";
 import { streamUpload } from "../utils/cloudinaryUpload.js";
-
-import bcrypt from "bcryptjs";
 
 export const createUser = async (req, res) => {
   const { name, email, password, role } = req.body;
@@ -10,22 +9,27 @@ export const createUser = async (req, res) => {
   try {
     if (!name || !email || !password || !role) {
       return res
-        .status(403)
-        .json({ success: false, message: "All fields are required" });
+        .status(400)
+        .json({ success: false, message: "All fields are required." });
     }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res
         .status(409)
-        .json({ success: false, message: "User already Exist" });
+        .json({ success: false, message: "User already exists." });
     }
 
     let photoUrl = "";
     if (req.file) {
-      const result = await streamUpload(req.file.buffer);
-      console.log("RESULT_PHOTO", result);
-      photoUrl = result.secure_url;
+      try {
+        const result = await streamUpload(req.file.buffer);
+        photoUrl = result.secure_url;
+      } catch (uploadErr) {
+        return res
+          .status(500)
+          .json({ success: false, message: "Image upload failed." });
+      }
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -39,53 +43,44 @@ export const createUser = async (req, res) => {
     });
 
     const userResponse = newUser.toObject();
-
     delete userResponse.password;
 
     return res.status(201).json({
       success: true,
-      message: "User registered successfully",
+      message: "User registered successfully.",
       newUser: userResponse,
     });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ success: false, message: "Server error" });
+    console.error("Registration Error:", error);
+    return res.status(500).json({ success: false, message: "Server error." });
   }
 };
 
 export const loginUser = async (req, res) => {
   try {
-    const { email, password, role } = req.body;
+    const { email, password } = req.body;
 
-    if (!email || !password || !role) {
+    if (!email || !password) {
       return res
-        .status(403)
-        .json({ success: false, message: "All fields are required" });
+        .status(400)
+        .json({ success: false, message: "Email and password are required." });
     }
 
     const existingUser = await User.findOne({ email }).select("+password");
     if (!existingUser) {
-      return res.status(404).json({
-        success: false,
-        message: "User is not registered with this email.",
-      });
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid email or password." });
     }
 
-    if (existingUser.role !== role) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid role provided.",
-      });
-    }
     const isPasswordMatch = await bcrypt.compare(
       password,
       existingUser.password
     );
     if (!isPasswordMatch) {
-      return res.status(403).json({
-        success: false,
-        message: "Invalid Password.",
-      });
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid email or password." });
     }
 
     const token = jwt.sign(
@@ -106,8 +101,8 @@ export const loginUser = async (req, res) => {
     });
 
     const userResponse = existingUser.toObject();
-
     delete userResponse.password;
+
     return res.status(200).json({
       success: true,
       message: "User logged in successfully.",
@@ -115,8 +110,8 @@ export const loginUser = async (req, res) => {
       user: userResponse,
     });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ success: false, message: "Server error" });
+    console.error("Login Error:", error);
+    return res.status(500).json({ success: false, message: "Server error." });
   }
 };
 
@@ -126,6 +121,7 @@ export const logoutUser = async (req, res) => {
     sameSite: "strict",
     secure: process.env.NODE_ENV === "production",
   });
+
   return res.status(200).json({
     success: true,
     message: "User logged out successfully.",
