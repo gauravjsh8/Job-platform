@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Job from "../models/jobModel.js";
 
 export const createJobs = async (req, res) => {
@@ -69,6 +70,9 @@ export const getAllJobs = async (req, res) => {
 export const getSingleJob = async (req, res) => {
   try {
     const jobId = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(jobId)) {
+      return res.status(404).json({ message: "Invalid Job id" });
+    }
 
     const singleJob = await Job.findById(jobId).populate(
       "postedBy",
@@ -87,6 +91,106 @@ export const getSingleJob = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+export const deleteJob = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.userId;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Invalid Job id" });
+    }
+
+    const getJob = await Job.findById(id);
+    if (!getJob) {
+      return res.status(404).json({ success: false, message: "Job not found" });
+    }
+
+    if (
+      !getJob.postedBy ||
+      getJob.postedBy._id.toString() !== userId.toString()
+    ) {
+      return res.status(403).json({ success: false, message: "Unauthorized" });
+    }
+
+    await getJob.deleteOne();
+
+    return res.status(200).json({
+      success: true,
+      message: "Deleted Successfully",
+      deletedJob: getJob,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+export const updateJob = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Invalid Job id" });
+    }
+    const userId = req.user.userId.toString();
+
+    const updateData = { ...req.body };
+
+    const findJOb = await Job.findById(id);
+    if (!findJOb) {
+      return res.status(404).json({ success: false, message: "Job not found" });
+    }
+    if (
+      !findJOb.postedBy ||
+      findJOb.postedBy._id.toString() !== userId.toString()
+    ) {
+      return res.status(403).json({ success: false, message: "Unauthorized" });
+    }
+    const updatedJob = await Job.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Job updated successfully",
+      data: updatedJob,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+export const myJob = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const getMyJob = await Job.find({ postedBy: userId });
+
+    if (getMyJob.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No jobs posted by this user",
+      });
+    }
+
+    const total = await Job.countDocuments({ postedBy: userId });
+
+    return res.status(200).json({
+      success: true,
+      message: "Jobs posted by this user found",
+      data: getMyJob,
+      total,
+    });
+  } catch (error) {
+    console.error(error);
     return res.status(500).json({ success: false, message: "Server Error" });
   }
 };
