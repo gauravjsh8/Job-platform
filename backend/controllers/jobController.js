@@ -65,3 +65,28 @@ export const getAllJobs = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+
+export const getSingleJob = async (req, res) => {
+  try {
+    const jobId = req.params.id;
+
+    const singleJob = await Job.findById(jobId).populate(
+      "postedBy",
+      "name email"
+    );
+    if (!singleJob) {
+      return res
+        .status(404)
+        .json({ success: false, message: "No such job found" });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Job found successfully",
+      job: singleJob,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
