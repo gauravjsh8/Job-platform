@@ -12,6 +12,13 @@ const jobSchema = new mongoose.Schema(
     description: { type: String, required: true, trim: true },
     company: { type: String, required: true, trim: true },
     location: { type: String, trim: true },
+    salary: { type: String },
+    jobType: {
+      type: String,
+      enum: ["Full-time", "Part-time", "Internship", "Remote"],
+      default: "Full-time",
+    },
+
     applicants: [applicantSchema],
     postedBy: {
       type: mongoose.Schema.Types.ObjectId,
