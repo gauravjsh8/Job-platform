@@ -4,6 +4,7 @@ import { connectToDb } from "./config/db.js";
 import cors from "cors";
 import { userRouter } from "./routes/userRoutes.js";
 import cookieParser from "cookie-parser";
+import { jobRouter } from "./routes/jobRoutes.js";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 3001;
 
 app.use("/api/users", userRouter);
+app.use("/api/jobs", jobRouter);
 
 connectToDb().then(() => {
   app.listen(PORT, () => {
