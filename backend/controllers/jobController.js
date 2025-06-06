@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Job from "../models/jobModel.js";
+import { streamUpload } from "../utils/cloudinaryUpload.js";
 
 export const createJobs = async (req, res) => {
   try {
@@ -192,5 +193,62 @@ export const myJob = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+export const applyJob = async (req, res) => {
+  try {
+    const jobId = req.params.id;
+    const userId = req.user.userId;
+
+    if (!mongoose.Types.ObjectId.isValid(jobId)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid job ID." });
+    }
+    const job = await Job.findById(jobId);
+    if (!job) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Job not found." });
+    }
+
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Resume is required." });
+    }
+
+    let resumeUrl = "";
+
+    try {
+      const result = await streamUpload(req.file.buffer);
+      resumeUrl = result.secure_url;
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ success: false, message: "Resume upload failed." });
+    }
+
+    const alreadyApplied = job.applicants.some(
+      (app) => app.userId.toString() === userId.toString()
+    );
+
+    if (alreadyApplied) {
+      return res
+        .status(409)
+        .json({ success: false, message: "Already applied to this job." });
+    }
+
+    job.applicants.push({ userId, resumeUrl });
+    await job.save();
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Applied successfully.", data: job });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Server error." });
   }
 };
