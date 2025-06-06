@@ -1,10 +1,10 @@
 import cloudinary from "../config/cloudinary.js";
 import streamifier from "streamifier";
 
-export const streamUpload = (buffer) => {
+export const streamUpload = (buffer, folder, resource_type) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
-      { folder: "user_resumes", resource_type: "raw" },
+      { folder, resource_type },
       (error, result) => {
         if (result) resolve(result);
         else reject(error);

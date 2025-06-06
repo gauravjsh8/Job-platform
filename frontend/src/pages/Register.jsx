@@ -1,4 +1,6 @@
+import axios from "axios";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 const RegistrationPage = () => {
   const [user, setUser] = useState({
@@ -13,8 +15,35 @@ const RegistrationPage = () => {
     setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
-    e.prevetDefault();
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setPhoto(file);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("name", user.name);
+    formData.append("email", user.email);
+    formData.append("password", user.password);
+    formData.append("role", user.role);
+
+    formData.append("photo", photo);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/users/register",
+        formData
+      );
+      const data = response.data;
+      console.log("DATA", data);
+    } catch (error) {
+      console.log("ERROR", error);
+      toast.error(error.response.data.message);
+    }
   };
   return (
     <div className="h-screen bg-gradient-to-tr from-purple-600 via-pink-500 to-red-400 flex items-center justify-center px-4">
@@ -85,6 +114,7 @@ const RegistrationPage = () => {
               name="photo"
               accept="image/*"
               className="w-full"
+              onChange={handlePhotoChange}
             />
           </div>
 
