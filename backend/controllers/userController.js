@@ -7,12 +7,6 @@ export const createUser = async (req, res) => {
   const { name, email, password, role } = req.body;
 
   try {
-    if (!name || !email || !password || !role) {
-      return res
-        .status(400)
-        .json({ success: false, message: "All fields are required." });
-    }
-
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res
@@ -59,12 +53,6 @@ export const createUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Email and password are required." });
-    }
 
     const existingUser = await User.findOne({ email }).select("+password");
     if (!existingUser) {
