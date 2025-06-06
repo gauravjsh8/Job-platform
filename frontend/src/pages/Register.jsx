@@ -1,8 +1,10 @@
 import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const RegistrationPage = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -39,9 +41,18 @@ const RegistrationPage = () => {
         formData
       );
       const data = response.data;
-      console.log("DATA", data);
+      toast.success(data.message);
+      setUser({
+        name: "",
+        email: "",
+        password: "",
+        role: "user",
+      });
+      setPhoto(null);
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (error) {
-      console.log("ERROR", error);
       toast.error(error.response.data.message);
     }
   };

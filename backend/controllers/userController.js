@@ -15,11 +15,7 @@ export const createUser = async (req, res) => {
     }
 
     let photoUrl = "";
-    if (!req.file) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Photo should be uploaded" });
-    }
+
     if (req.file) {
       const folder = req.file.mimetype.startsWith("image/")
         ? "user_photos"
