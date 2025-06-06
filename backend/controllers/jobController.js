@@ -7,19 +7,6 @@ export const createJobs = async (req, res) => {
     const { title, description, company, location, salary, jobType } = req.body;
     const postedBy = req.user.userId;
 
-    if (
-      !title ||
-      !description ||
-      !company ||
-      !location ||
-      !salary ||
-      !jobType
-    ) {
-      return res
-        .status(403)
-        .json({ success: false, message: "All fields are required" });
-    }
-
     const newJob = await Job.create({
       title,
       description,
@@ -142,18 +129,17 @@ export const updateJob = async (req, res) => {
     }
     const userId = req.user.userId.toString();
 
+    // Only the fields sent in request body will be updated
     const updateData = { ...req.body };
 
-    const findJOb = await Job.findById(id);
-    if (!findJOb) {
+    const findJob = await Job.findById(id);
+    if (!findJob) {
       return res.status(404).json({ success: false, message: "Job not found" });
     }
-    if (
-      !findJOb.postedBy ||
-      findJOb.postedBy._id.toString() !== userId.toString()
-    ) {
+    if (!findJob.postedBy || findJob.postedBy._id.toString() !== userId) {
       return res.status(403).json({ success: false, message: "Unauthorized" });
     }
+
     const updatedJob = await Job.findByIdAndUpdate(id, updateData, {
       new: true,
       runValidators: true,
@@ -169,6 +155,7 @@ export const updateJob = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+
 export const myJob = async (req, res) => {
   try {
     const userId = req.user.userId;
