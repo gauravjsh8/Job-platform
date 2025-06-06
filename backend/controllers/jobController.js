@@ -244,9 +244,16 @@ export const applyJob = async (req, res) => {
     job.applicants.push({ userId, resumeUrl });
     await job.save();
 
-    return res
-      .status(200)
-      .json({ success: true, message: "Applied successfully.", data: job });
+    const updatedJob = await Job.findById(jobId).populate(
+      "applicants.userId",
+      "name email"
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Applied successfully.",
+      data: updatedJob,
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ success: false, message: "Server error." });
