@@ -32,8 +32,8 @@ const ViewJob = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200">
+    <div className="  flex items-center justify-center mx-auto p-6">
+      <div className="bg-white shadow-md rounded-lg p-6 border w-lg border-gray-200">
         <h2 className="text-3xl font-bold text-blue-700 mb-4">{job.title}</h2>
         <p className="text-gray-700 mb-2">
           <strong>Company:</strong> {job.company}
@@ -59,7 +59,7 @@ const ViewJob = () => {
             day: "numeric",
             hour: "numeric",
             minute: "2-digit",
-            hour12: true,
+            hour12: false,
           })}
         </p>
 

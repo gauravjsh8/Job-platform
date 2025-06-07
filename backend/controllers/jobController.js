@@ -223,7 +223,7 @@ export const applyJob = async (req, res) => {
     let resumeUrl = "";
 
     try {
-      const result = await streamUpload(req.file.buffer);
+      const result = await streamUpload(req.file.buffer, "resumes", "raw");
       resumeUrl = result.secure_url;
     } catch (error) {
       console.error(error);
