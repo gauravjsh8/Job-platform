@@ -1,113 +1,53 @@
-// import React, { useState } from "react";
-// import { Link, useNavigate } from "react-router-dom";
-// const Navbar = () => {
-//   const [isOpen, setIsOpen] = useState(false);
-//   const { user, logout } = useAuth(); // destructure user and logout
-//   const navigate = useNavigate();
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
 
-//   const handleLogout = () => {
-//     logout(); // call your logout function
-//     navigate("/login");
-//   };
+const Navbar = () => {
+  const { userProfile, logout } = useAuth();
+  const navigate = useNavigate();
 
-//   const toggleMenu = () => setIsOpen(!isOpen);
+  const handleLogout = () => {
+    logout();
+  };
 
-//   return (
-//     <nav className="bg-white shadow-md">
-//       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-//         <Link to="/" className="text-xl font-bold text-indigo-600">
-//           JobPortal
-//         </Link>
+  return (
+    <nav className="bg-white shadow-md py-3 px-8 flex justify-between items-center">
+      <Link to="/" className="text-xl font-bold text-indigo-600">
+        MyApp
+      </Link>
 
-//         <div className="hidden md:flex space-x-6">
-//           <Link to="/" className="hover:text-indigo-600">
-//             Home
-//           </Link>
-//           <Link to="/jobs" className="hover:text-indigo-600">
-//             Jobs
-//           </Link>
-//           <Link to="/about" className="hover:text-indigo-600">
-//             About
-//           </Link>
-//           <Link to="/contact" className="hover:text-indigo-600">
-//             Contact
-//           </Link>
+      <div className="flex items-center space-x-6">
+        <Link to="/jobs" className="text-gray-700 hover:text-indigo-500">
+          Jobs
+        </Link>
+        <Link to="/about" className="text-gray-700 hover:text-indigo-500">
+          About
+        </Link>
+        <Link to="/contact" className="text-gray-700 hover:text-indigo-500">
+          Contact
+        </Link>
 
-//           {user ? (
-//             <>
-//               <Link to="/applications" className="hover:text-indigo-600">
-//                 My Applications
-//               </Link>
-//               <button
-//                 onClick={handleLogout}
-//                 className="text-red-500 hover:underline"
-//               >
-//                 Logout
-//               </button>
-//             </>
-//           ) : (
-//             <>
-//               <Link to="/login" className="hover:text-indigo-600">
-//                 Login
-//               </Link>
-//               <Link to="/register" className="hover:text-indigo-600">
-//                 Register
-//               </Link>
-//             </>
-//           )}
-//         </div>
+        {userProfile ? (
+          <>
+            <span className="text-gray-700">Hi, {userProfile.name}</span>
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 cursor-pointer"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <Link
+            to="/login"
+            className="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700 cursor-pointer"
+          >
+            Login
+          </Link>
+        )}
+      </div>
+    </nav>
+  );
+};
 
-//         {/* Mobile Menu Button */}
-//         <button
-//           className="md:hidden text-indigo-600 focus:outline-none"
-//           onClick={toggleMenu}
-//         >
-//           ☰
-//         </button>
-//       </div>
-
-//       {/* Mobile Menu */}
-//       {isOpen && (
-//         <div className="md:hidden px-4 pb-4 space-y-2">
-//           <Link to="/" className="block hover:text-indigo-600">
-//             Home
-//           </Link>
-//           <Link to="/jobs" className="block hover:text-indigo-600">
-//             Jobs
-//           </Link>
-//           <Link to="/about" className="block hover:text-indigo-600">
-//             About
-//           </Link>
-//           <Link to="/contact" className="block hover:text-indigo-600">
-//             Contact
-//           </Link>
-
-//           {user ? (
-//             <>
-//               <Link to="/applications" className="block hover:text-indigo-600">
-//                 My Applications
-//               </Link>
-//               <button
-//                 onClick={handleLogout}
-//                 className="text-red-500 hover:underline block"
-//               >
-//                 Logout
-//               </button>
-//             </>
-//           ) : (
-//             <>
-//               <Link to="/login" className="block hover:text-indigo-600">
-//                 Login
-//               </Link>
-//               <Link to="/register" className="block hover:text-indigo-600">
-//                 Register
-//               </Link>
-//             </>
-//           )}
-//         </div>
-//       )}
-//     </nav>
-//   );
-// };
-
-// export default Navbar;
+export default Navbar;
