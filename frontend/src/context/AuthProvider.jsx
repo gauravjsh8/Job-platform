@@ -6,8 +6,11 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [role, setRole] = useState(null);
 
   const logout = async () => {
+    setLoading(true);
+
     try {
       await axios.post(
         "http://localhost:3000/api/users/logout",
@@ -18,12 +21,17 @@ export const AuthProvider = ({ children }) => {
       );
 
       setUserProfile(null);
+      setRole(null);
     } catch (error) {
       console.error("Logout failed", error);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
     const fetchUser = async () => {
+      setLoading(true);
+
       try {
         const res = await axios.get(
           "http://localhost:3000/api/users/user-profile",
@@ -32,8 +40,11 @@ export const AuthProvider = ({ children }) => {
           }
         );
         setUserProfile(res.data);
+        console.log("RESDATA", res.data);
+        setRole(res.data.role);
       } catch (err) {
         setUserProfile(null);
+        setRole(null);
       } finally {
         setLoading(false);
       }
@@ -44,7 +55,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ userProfile, loading, setUserProfile, logout }}
+      value={{ userProfile, loading, setUserProfile, logout, role, setRole }}
     >
       {children}
     </AuthContext.Provider>

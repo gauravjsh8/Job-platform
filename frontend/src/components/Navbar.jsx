@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 
 const Navbar = () => {
-  const { userProfile, logout } = useAuth();
+  const { userProfile, logout, role } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -29,10 +29,21 @@ const Navbar = () => {
 
         {userProfile ? (
           <>
-            <span className="text-gray-700">Hi, {userProfile.name}</span>
+            <span className="text-gray-700 font-extrabold">
+              Hi, {userProfile.name}
+            </span>
+
+            {role === "admin" && (
+              <Link
+                to="/dashboard"
+                className="textwhite hover:bg-green-800 bg-green-500 px-3 py-1 rounded"
+              >
+                Dashboard
+              </Link>
+            )}
             <button
               onClick={handleLogout}
-              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 cursor-pointer"
+              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-800 cursor-pointer"
             >
               Logout
             </button>

@@ -1,11 +1,25 @@
 import mongoose from "mongoose";
 import Job from "../models/jobModel.js";
 import { streamUpload } from "../utils/cloudinaryUpload.js";
+import User from "../models/userModel.js";
 
 export const createJobs = async (req, res) => {
   try {
     const { title, description, company, location, salary, jobType } = req.body;
-    const postedBy = req.user.userId;
+    const postedBy = req.user.userId.toString();
+
+    const user = await User.findById(postedBy);
+    if (!user) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Unauthorized user" });
+    }
+
+    if (user.role !== "admin") {
+      return res
+        .status(403)
+        .json({ success: false, message: "Only admins can post jobs" });
+    }
 
     const newJob = await Job.create({
       title,
