@@ -260,3 +260,18 @@ export const applyJob = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error." });
   }
 };
+
+export const userCreatedJob = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const job = await Job.find({ postedBy: userId });
+
+    if (!job || job.length === 0) {
+      res.status(404).json({ message: "no job created by this user" });
+    }
+
+    res.status(200).json({ jobs: job });
+  } catch (error) {
+    console.log(error);
+  }
+};

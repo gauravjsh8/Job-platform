@@ -9,6 +9,7 @@ import {
   getSingleJob,
   myJob,
   updateJob,
+  userCreatedJob,
 } from "../controllers/jobController.js";
 import upload from "../middleware/multer.js";
 import {
@@ -37,3 +38,5 @@ jobRouter.put(
 jobRouter.get("/findmyjob", authUser, myJob);
 
 jobRouter.post("/:id/applyjob", authUser, upload.single("resume"), applyJob);
+
+jobRouter.get("/jobbyuser", authUser, userCreatedJob);
