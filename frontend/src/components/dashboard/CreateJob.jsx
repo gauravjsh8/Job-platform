@@ -1,12 +1,58 @@
 import React, { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const CreateJob = () => {
+  const jobInfo = {
+    title: "",
+    description: "",
+    company: "",
+    location: "",
+    salary: "",
+  };
+
+  const [postJob, setPostJob] = useState(jobInfo);
+
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setPostJob((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/jobs/create-job",
+        postJob,
+        {
+          withCredentials: true,
+        }
+      );
+      const data = response.data;
+      setPostJob(data.job);
+      toast.success(data.message);
+      setPostJob({
+        title: "",
+        description: "",
+        company: "",
+        location: "",
+        salary: "",
+        jobType: "Full-time",
+      });
+
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2000);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
   return (
     <div className="  max-w-xl mx-auto p-6 bg-white rounded shadow-md">
       <h2 className="text-2xl font-bold mb-4">Create a New Job</h2>
-      <form className="space-y-2">
+      <form className="space-y-2" onSubmit={handleSubmit}>
         <div>
           <label className="block font-semibold mb-1" htmlFor="title">
             Job Title <span className="text-red-500">*</span>
@@ -17,6 +63,7 @@ const CreateJob = () => {
             name="title"
             required
             className="w-full border border-gray-300 p-2 rounded"
+            onChange={handleChange}
           />
         </div>
 
@@ -30,6 +77,7 @@ const CreateJob = () => {
             required
             rows={5}
             className="w-full border border-gray-300 p-2 rounded"
+            onChange={handleChange}
           />
         </div>
 
@@ -43,6 +91,7 @@ const CreateJob = () => {
             name="company"
             required
             className="w-full border border-gray-300 p-2 rounded"
+            onChange={handleChange}
           />
         </div>
 
@@ -55,6 +104,7 @@ const CreateJob = () => {
             id="location"
             name="location"
             className="w-full border border-gray-300 p-2 rounded"
+            onChange={handleChange}
           />
         </div>
 
@@ -68,6 +118,7 @@ const CreateJob = () => {
             name="salary"
             className="w-full border border-gray-300 p-2 rounded"
             placeholder="e.g., $50,000 - $60,000"
+            onChange={handleChange}
           />
         </div>
 
@@ -79,6 +130,7 @@ const CreateJob = () => {
             id="jobType"
             name="jobType"
             className="w-full border border-gray-300 p-2 rounded"
+            onChange={handleChange}
           >
             <option value="Full-time">Full-time</option>
             <option value="Part-time">Part-time</option>
