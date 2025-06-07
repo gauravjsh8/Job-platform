@@ -71,7 +71,7 @@ const PostedJobs = () => {
                     View
                   </button>
                   <button
-                    onClick={() => alert(`Applying to: ${job.title}`)}
+                    onClick={() => navigate(`/jobs/${job._id}/apply`)}
                     className="px-4 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600 transition"
                   >
                     Apply

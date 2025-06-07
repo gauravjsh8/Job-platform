@@ -1,11 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 const ViewJob = () => {
   const { id } = useParams();
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -64,7 +66,10 @@ const ViewJob = () => {
         </p>
 
         <div className="flex flex-wrap gap-4">
-          <button className="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition">
+          <button
+            className="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+            onClick={() => navigate(`/jobs/${job._id}/apply`)}
+          >
             Apply Now
           </button>
           <Link
