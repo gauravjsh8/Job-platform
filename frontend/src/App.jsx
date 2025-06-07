@@ -13,6 +13,7 @@ import PostedJobs from "./pages/PostedJobs";
 import ViewJob from "./pages/ViewJob";
 import ApplyJob from "./pages/ApplyJob";
 import UserCreatedJobs from "./pages/UserCreatedJobs";
+import MyProfile from "./pages/MyProfile";
 
 function App() {
   const location = useLocation();
@@ -37,6 +38,7 @@ function App() {
           <Route path="/dashboard/create-job" element={<CreateJob />} />
           <Route index element={<DashboardHome />} />
           <Route path="/dashboard/posted-jobs" element={<UserCreatedJobs />} />
+          <Route path="/dashboard/profile" element={<MyProfile />} />
         </Route>
       </Routes>
     </div>
