@@ -12,6 +12,7 @@ import DashboardHome from "./components/dashboard/DashboardHome";
 import PostedJobs from "./pages/PostedJobs";
 import ViewJob from "./pages/ViewJob";
 import ApplyJob from "./pages/ApplyJob";
+import UserCreatedJobs from "./pages/UserCreatedJobs";
 
 function App() {
   const location = useLocation();
@@ -33,8 +34,9 @@ function App() {
         <Route path="/jobs/:id/apply" element={<ApplyJob />} />
 
         <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route path="create-job" element={<CreateJob />} />
+          <Route path="/dashboard/create-job" element={<CreateJob />} />
           <Route index element={<DashboardHome />} />
+          <Route path="/dashboard/posted-jobs" element={<UserCreatedJobs />} />
         </Route>
       </Routes>
     </div>

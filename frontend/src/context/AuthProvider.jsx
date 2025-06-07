@@ -40,6 +40,7 @@ export const AuthProvider = ({ children }) => {
           }
         );
         setUserProfile(res.data);
+        console.log(res.data);
         setRole(res.data.role);
       } catch (err) {
         setUserProfile(null);
