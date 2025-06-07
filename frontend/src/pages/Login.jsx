@@ -1,17 +1,15 @@
 import axios from "axios";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-  });
 
-  const payload = { email: user.email, password: user.password };
+  const [user, setUser] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -19,31 +17,38 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors({});
 
+    const newErrors = {};
+    if (!user.email) newErrors.email = "Email is required";
+    if (!user.password) newErrors.password = "Password is required";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setLoading(true);
     try {
       const response = await axios.post(
         "http://localhost:3000/api/users/login",
-        payload,
+        user,
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           withCredentials: true,
         }
       );
 
-      const data = await response.data;
-      console.log("DATA", data);
       toast.success("Logged in successfully!");
       setUser({ email: "", password: "" });
-
-      setTimeout(() => {
-        navigate("/ ");
-      }, 1000);
+      setTimeout(() => navigate("/"), 1000);
     } catch (error) {
       toast.error(error?.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <div className="min-h-screen bg-gradient-to-tr from-blue-700 via-indigo-500 to-purple-600 flex items-center justify-center px-4">
       <div className="bg-white bg-opacity-90 backdrop-blur-md rounded-2xl shadow-lg w-full max-w-sm p-6">
@@ -64,10 +69,14 @@ const LoginPage = () => {
               name="email"
               value={user.email}
               onChange={handleChange}
-              required
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className={`w-full px-4 py-2 rounded-lg border ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              } focus:outline-none focus:ring-2 focus:ring-indigo-400`}
               placeholder="you@example.com"
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            )}
           </div>
 
           <div>
@@ -77,23 +86,38 @@ const LoginPage = () => {
             >
               Password
             </label>
-            <input
-              type="password"
-              value={user.password}
-              name="password"
-              onChange={handleChange}
-              id="password"
-              required
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-              placeholder="********"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                value={user.password}
+                onChange={handleChange}
+                className={`w-full px-4 py-2 rounded-lg border ${
+                  errors.password ? "border-red-500" : "border-gray-300"
+                } focus:outline-none`}
+                placeholder="********"
+              />
+              <span
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-2 cursor-pointer text-sm text-indigo-500"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </span>
+            </div>
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+            )}
           </div>
 
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white font-semibold py-2 rounded-2xl hover:bg-indigo-700 transition cursor-pointer"
+            disabled={loading}
+            className={`w-full bg-indigo-600 text-white font-semibold py-2 rounded-2xl hover:bg-indigo-700 transition cursor-pointer ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
-            Log In
+            {loading ? "Logging in..." : "Log In"}
           </button>
         </form>
 
