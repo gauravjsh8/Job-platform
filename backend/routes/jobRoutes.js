@@ -7,6 +7,7 @@ import {
   deleteJob,
   getAllJobs,
   getSingleJob,
+  jobAppliedByUser,
   myJob,
   updateJob,
   userCreatedJob,
@@ -40,3 +41,4 @@ jobRouter.get("/findmyjob", authUser, myJob);
 jobRouter.post("/:id/applyjob", authUser, upload.single("resume"), applyJob);
 
 jobRouter.get("/jobbyuser", authUser, userCreatedJob);
+jobRouter.get("/jobappliedbyuser", authUser, jobAppliedByUser);

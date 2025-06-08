@@ -45,6 +45,13 @@ const Navbar = () => {
                 Dashboard
               </Link>
             )}
+            <Link
+              to="/my-jobs"
+              className="text-white  border-1 px-2 rounded-lg bg-pink-400 hover:bg-pink-600"
+            >
+              My-jobs
+            </Link>
+
             <button
               onClick={handleLogout}
               className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-800 cursor-pointer"
