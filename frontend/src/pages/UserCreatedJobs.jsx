@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthProvider";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const UserCreatedJobs = () => {
   const [jobs, setJobs] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [jobToDelete, setJobToDelete] = useState(null);
   const { userProfile } = useAuth();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const jobByUser = async () => {
@@ -53,6 +56,9 @@ const UserCreatedJobs = () => {
     setShowModal(false);
   };
 
+  const handleUpdate = (id) => {
+    navigate(`/dashboard/updatejob/${id}`);
+  };
   return (
     <div className="max-w-4xl mx-auto mt-1 p-6 bg-white shadow-md rounded-lg">
       <h1 className="text-2xl font-bold text-gray-800 mb-4">
@@ -86,7 +92,7 @@ const UserCreatedJobs = () => {
               </div>
               <div className="mt-4 flex gap-3">
                 <button
-                  onClick={() => console.log("Update clicked", job._id)}
+                  onClick={() => handleUpdate(job._id)}
                   className="px-4 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
                 >
                   Update

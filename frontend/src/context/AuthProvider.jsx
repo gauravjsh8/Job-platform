@@ -8,18 +8,31 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState(null);
 
+  const fetchUser = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(
+        "http://localhost:3000/api/users/user-profile",
+        { withCredentials: true }
+      );
+      setUserProfile(res.data);
+      setRole(res.data.role);
+    } catch (err) {
+      setUserProfile(null);
+      setRole(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logout = async () => {
     setLoading(true);
-
     try {
       await axios.post(
         "http://localhost:3000/api/users/logout",
         {},
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
-
       setUserProfile(null);
       setRole(null);
     } catch (error) {
@@ -28,38 +41,25 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
-    const fetchUser = async () => {
-      setLoading(true);
-
-      try {
-        const res = await axios.get(
-          "http://localhost:3000/api/users/user-profile",
-          {
-            withCredentials: true,
-          }
-        );
-        setUserProfile(res.data);
-        console.log(res.data);
-        setRole(res.data.role);
-      } catch (err) {
-        setUserProfile(null);
-        setRole(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUser();
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ userProfile, loading, setUserProfile, logout, role, setRole }}
+      value={{
+        userProfile,
+        loading,
+        setUserProfile,
+        logout,
+        role,
+        setRole,
+        fetchUser, //
+      }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
-
 export const useAuth = () => useContext(AuthContext);

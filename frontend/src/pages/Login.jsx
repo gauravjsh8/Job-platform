@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthProvider";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { userProfile, setUserProfile } = useAuth();
+  const { userProfile, setUserProfile, fetchUser } = useAuth();
 
   const [user, setUser] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
@@ -41,6 +41,7 @@ const LoginPage = () => {
         }
       );
       const data = response.data;
+      await fetchUser();
       setUserProfile(data.user);
 
       toast.success("Logged in successfully!");
