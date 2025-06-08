@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import User from "../models/userModel.js";
 import { streamUpload } from "../utils/cloudinaryUpload.js";
+import Job from "../models/jobModel.js";
 
 export const createUser = async (req, res) => {
   const { name, email, password, role } = req.body;

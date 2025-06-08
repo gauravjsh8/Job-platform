@@ -8,7 +8,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    navigate("/");
   };
 
   return (
@@ -18,6 +18,9 @@ const Navbar = () => {
       </Link>
 
       <div className="flex items-center space-x-6">
+        <Link to="/" className="text-gray-700 hover:text-indigo-500">
+          Home
+        </Link>
         <Link to="/jobs" className="text-gray-700 hover:text-indigo-500">
           Jobs
         </Link>

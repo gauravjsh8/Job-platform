@@ -207,11 +207,19 @@ export const applyJob = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Invalid job ID." });
     }
+
     const job = await Job.findById(jobId);
     if (!job) {
       return res
         .status(404)
         .json({ success: false, message: "Job not found." });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found." });
     }
 
     if (!req.file) {
@@ -221,7 +229,6 @@ export const applyJob = async (req, res) => {
     }
 
     let resumeUrl = "";
-
     try {
       const result = await streamUpload(req.file.buffer, "resumes", "raw");
       resumeUrl = result.secure_url;
@@ -235,7 +242,6 @@ export const applyJob = async (req, res) => {
     const alreadyApplied = job.applicants.some(
       (app) => app.userId.toString() === userId.toString()
     );
-
     if (alreadyApplied) {
       return res
         .status(409)
@@ -243,7 +249,11 @@ export const applyJob = async (req, res) => {
     }
 
     job.applicants.push({ userId, resumeUrl });
-    await job.save();
+    if (!user.appliedJobs.includes(job._id)) {
+      user.appliedJobs.push(job._id);
+    }
+
+    await Promise.all([job.save(), user.save()]);
 
     const updatedJob = await Job.findById(jobId).populate(
       "applicants.userId",
