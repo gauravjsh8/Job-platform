@@ -36,6 +36,7 @@ function App() {
         <Route path="/jobs/:id" element={<ViewJob />} />
         <Route path="/jobs/:id/apply" element={<ApplyJob />} />
         <Route path="/my-jobs" element={<MyJobs />} />
+        <Route path="/profile" element={<MyProfile />} />
 
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route path="/dashboard/create-job" element={<CreateJob />} />

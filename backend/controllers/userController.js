@@ -134,3 +134,25 @@ export const userProfile = async (req, res) => {
   const user = await User.findById(userId);
   res.json(user);
 };
+
+export const allUsers = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const users = await User.find();
+    res.status(200).json({ users: users });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
+
+export const getAdmins = async (req, res) => {
+  try {
+    const admins = await User.find({ role: "admin" });
+    res.status(200).json({ admin: admins });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error" });
+  }
+};

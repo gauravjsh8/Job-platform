@@ -14,3 +14,14 @@ export const authUser = async (req, res, next) => {
     return res.status(403).json({ success: false, message: "Invalid token" });
   }
 };
+
+export const isAdmin = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return res.status(401).json({
+        message: `User with role ${req.user.role} is not allowed for this operation`,
+      });
+    }
+    next();
+  };
+};
