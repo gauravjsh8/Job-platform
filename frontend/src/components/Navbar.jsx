@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 import { FaRegUser } from "react-icons/fa";
-import { useRef } from "react";
-import { useEffect } from "react";
 
 const Navbar = () => {
   const { userProfile, logout, role } = useAuth();
@@ -30,33 +28,39 @@ const Navbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Shared link styles for animated hover effect
+  const animatedLinkClasses =
+    "text-gray-700 relative hover:text-indigo-600 hover:scale-105 transition duration-300 before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-0.5 before:bg-indigo-600 before:transition-all hover:before:w-full";
   return (
-    <nav className="bg-white shadow-md py-3 px-8 flex justify-between items-center">
+    <nav className="bg-white shadow-md py-3 px-8 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
       <Link to="/" className="text-xl font-bold text-indigo-600">
         Job-Platform
       </Link>
 
       <div className="flex items-center space-x-6">
-        <Link to="/" className="text-gray-700 hover:text-indigo-500">
+        <Link to="/" className={animatedLinkClasses}>
           Home
         </Link>
-        <Link to="/jobs" className="text-gray-700 hover:text-indigo-500">
+        <Link to="/jobs" className={animatedLinkClasses}>
           Jobs
         </Link>
-        <Link to="/about-us" className="text-gray-700 hover:text-indigo-500">
+
+        <Link to="/about-us" className={animatedLinkClasses}>
           About
         </Link>
-        <Link to="/contact-us" className="text-gray-700 hover:text-indigo-500">
+
+        <Link to="/contact-us" className={animatedLinkClasses}>
           Contact
         </Link>
 
         {userProfile ? (
-          <div className="relative " ref={dropDownRef}>
+          <div className="relative" ref={dropDownRef}>
             <button
               onClick={toggleDropdown}
               className="flex items-center focus:outline-none"
             >
-              <FaRegUser className="h-8 w-8 text-gray-700 hover:text-indigo-600 cursor-pointer" />
+              <FaRegUser className="h-8 w-8 text-red-600 hover:text-red-800 cursor-pointer transition-colors duration-300" />
             </button>
 
             {showDropdown && (
@@ -96,7 +100,7 @@ const Navbar = () => {
         ) : (
           <Link
             to="/login"
-            className="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700 cursor-pointer"
+            className="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700 cursor-pointer transition-colors duration-300"
           >
             Login
           </Link>

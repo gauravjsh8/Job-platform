@@ -100,6 +100,28 @@ function DashboardLayout() {
                 My Profile
               </Link>
             </li>
+            <li>
+              <Link
+                to="/dashboard/all-users"
+                className="flex items-center px-4 py-2 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200"
+              >
+                <svg
+                  className="w-5 h-5 mr-3"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m13-4a4 4 0 10-7.75 1.88M6 10a4 4 0 117.75-1.88"
+                  ></path>
+                </svg>
+                All Users
+              </Link>
+            </li>
           </ul>
         </nav>
         <div className="p-4 border-t border-gray-700 mt-auto">

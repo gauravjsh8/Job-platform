@@ -16,38 +16,46 @@ import UserCreatedJobs from "./pages/UserCreatedJobs";
 import MyProfile from "./pages/MyProfile";
 import UpdateJob from "./pages/UpdateJob";
 import MyJobs from "./pages/MyJobs";
+import AllUsers from "./pages/AllUsers";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const location = useLocation();
-
   const isDashboard = location.pathname.startsWith("/dashboard");
+
   return (
     <div>
       {!isDashboard && <Navbar />}
 
-      <Routes>
-        <Route path="/" element={<Home />}></Route>
+      <div className={!isDashboard ? "pt-14" : ""}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<RegistrationPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/contact-us" element={<ContactPage />} />
+          <Route path="/about-us" element={<AboutPage />} />
+          <Route path="/jobs" element={<PostedJobs />} />
+          <Route path="/jobs/:id" element={<ViewJob />} />
+          <Route path="/jobs/:id/apply" element={<ApplyJob />} />
+          <Route path="/my-jobs" element={<MyJobs />} />
+          <Route path="/profile" element={<MyProfile />} />
 
-        <Route path="/register" element={<RegistrationPage />}></Route>
-        <Route path="/login" element={<LoginPage />}></Route>
-        <Route path="/contact-us" element={<ContactPage />}></Route>
-        <Route path="/about-us" element={<AboutPage />}></Route>
-        <Route path="/jobs" element={<PostedJobs />}></Route>
-        <Route path="/jobs/:id" element={<ViewJob />} />
-        <Route path="/jobs/:id/apply" element={<ApplyJob />} />
-        <Route path="/my-jobs" element={<MyJobs />} />
-        <Route path="/profile" element={<MyProfile />} />
-
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route path="/dashboard/create-job" element={<CreateJob />} />
-          <Route index element={<DashboardHome />} />
-          <Route path="/dashboard/posted-jobs" element={<UserCreatedJobs />} />
-          <Route path="/dashboard/profile" element={<MyProfile />} />
-          <Route path="/dashboard/updatejob/:id" element={<UpdateJob />} />
-        </Route>
-      </Routes>
+          <Route element={<ProtectedRoute requiredRole="admin" />}>
+            <Route path="/dashboard" element={<DashboardLayout />}>
+              <Route path="/dashboard/create-job" element={<CreateJob />} />
+              <Route index element={<DashboardHome />} />
+              <Route
+                path="/dashboard/posted-jobs"
+                element={<UserCreatedJobs />}
+              />
+              <Route path="/dashboard/profile" element={<MyProfile />} />
+              <Route path="/dashboard/updatejob/:id" element={<UpdateJob />} />
+              <Route path="/dashboard/all-users" element={<AllUsers />} />
+            </Route>
+          </Route>
+        </Routes>
+      </div>
     </div>
   );
 }
-
 export default App;

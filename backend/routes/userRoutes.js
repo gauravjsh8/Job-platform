@@ -2,9 +2,11 @@ import express from "express";
 import {
   allUsers,
   createUser,
+  forgotPassword,
   getAdmins,
   loginUser,
   logoutUser,
+  resetPassword,
   userProfile,
 } from "../controllers/userController.js";
 import upload from "../middleware/multer.js";
@@ -33,3 +35,6 @@ userRouter.get("/user-profile", authUser, userProfile);
 userRouter.get("/allusers", authUser, isAdmin("admin"), allUsers);
 
 userRouter.get("/admins", authUser, isAdmin("admin"), getAdmins);
+
+userRouter.post("/forgot-password", forgotPassword);
+userRouter.post("/reset-password/:token", resetPassword);

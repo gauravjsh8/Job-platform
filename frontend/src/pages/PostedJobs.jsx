@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 const PostedJobs = () => {
   const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true); // new loading state
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchJobs = async () => {
       try {
@@ -14,10 +16,21 @@ const PostedJobs = () => {
         setJobs(response.data.jobs);
       } catch (error) {
         console.log("ERROR", error);
+      } finally {
+        setLoading(false); // fetch finished
       }
     };
     fetchJobs();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="max-w-5xl mx-auto p-6">
+        <h2 className="text-3xl font-bold mb-6">Posted Jobs</h2>
+        <p>Loading jobs...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-5xl mx-auto p-6">

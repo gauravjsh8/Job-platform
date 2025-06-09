@@ -38,6 +38,12 @@ const userSchema = new mongoose.Schema(
         ref: "Job",
       },
     ],
+    resetPasswordToken: {
+      type: String,
+    },
+    resetPasswordExpires: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );

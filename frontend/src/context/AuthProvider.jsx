@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
       );
       setUserProfile(res.data);
       setRole(res.data.role);
+      console.log(res.data);
     } catch (err) {
       setUserProfile(null);
       setRole(null);
