@@ -1,25 +1,10 @@
 import React, { useState } from "react";
 
 const ContactPage = () => {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    message: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const handleChange = (e) => {};
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // For now, just log the form data
-    console.log("Contact form submitted:", formData);
-    alert("Thank you for contacting us!");
-
-    // Clear form after submit
-    setFormData({ fullName: "", email: "", message: "" });
   };
 
   return (
@@ -36,8 +21,6 @@ const ContactPage = () => {
               type="text"
               id="fullName"
               name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
               required
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
@@ -51,8 +34,6 @@ const ContactPage = () => {
               type="email"
               id="email"
               name="email"
-              value={formData.email}
-              onChange={handleChange}
               required
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
@@ -65,8 +46,6 @@ const ContactPage = () => {
             <textarea
               id="message"
               name="message"
-              value={formData.message}
-              onChange={handleChange}
               rows="5"
               required
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"

@@ -5,6 +5,7 @@ import cors from "cors";
 import { userRouter } from "./routes/userRoutes.js";
 import cookieParser from "cookie-parser";
 import { jobRouter } from "./routes/jobRoutes.js";
+import { contactRouter } from "./routes/contactRoutes.js";
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ const PORT = process.env.PORT || 3001;
 
 app.use("/api/users", userRouter);
 app.use("/api/jobs", jobRouter);
+app.use("/api/messages", contactRouter);
 
 connectToDb().then(() => {
   app.listen(PORT, () => {
