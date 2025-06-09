@@ -1,4 +1,3 @@
-// pages/ResetPasswordPage.jsx
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -7,11 +6,20 @@ import toast from "react-hot-toast";
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { token } = useParams();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const response = await axios.post(
@@ -22,12 +30,14 @@ const ResetPassword = () => {
         }
       );
       toast.success("Password reset successful");
-      navigate("/login");
       setPassword("");
       setConfirmPassword("");
-
-      console.log("RESPONSE", response);
-    } catch (error) {}
+      navigate("/login");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Reset failed");
+    } finally {
+      setLoading(false); // stop loading
+    }
   };
 
   return (
@@ -43,6 +53,7 @@ const ResetPassword = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            disabled={loading}
           />
           <input
             type="password"
@@ -50,12 +61,18 @@ const ResetPassword = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            disabled={loading}
           />
           <button
             type="submit"
-            className="w-full py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+            disabled={loading}
+            className={`w-full py-2 text-white rounded-lg ${
+              loading
+                ? "bg-indigo-400 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700"
+            }`}
           >
-            Reset
+            {loading ? "Resetting..." : "Reset"}
           </button>
         </form>
       </div>
