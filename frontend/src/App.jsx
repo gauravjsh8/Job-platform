@@ -20,6 +20,7 @@ import AllUsers from "./pages/AllUsers";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import Messages from "./components/dashboard/Messages";
 
 function App() {
   const location = useLocation();
@@ -55,6 +56,7 @@ function App() {
               <Route path="/dashboard/profile" element={<MyProfile />} />
               <Route path="/dashboard/updatejob/:id" element={<UpdateJob />} />
               <Route path="/dashboard/all-users" element={<AllUsers />} />
+              <Route path="/dashboard/messages" element={<Messages />} />
             </Route>
           </Route>
         </Routes>

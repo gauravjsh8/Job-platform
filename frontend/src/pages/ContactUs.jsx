@@ -1,10 +1,37 @@
+import axios from "axios";
 import React, { useState } from "react";
 
 const ContactPage = () => {
-  const handleChange = (e) => {};
+  const [message, setMessage] = useState({
+    fullname: "",
+    email: "",
+    phoneNumber: "",
+    message: "",
+  });
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    setMessage((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/messages/send-message",
+        message,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response);
+      setMessage({ fullname: "", email: "", phoneNumber: "", message: "" });
+      alert("Message sent successfully!");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -14,13 +41,15 @@ const ContactPage = () => {
 
         <form onSubmit={handleSubmit} className="space-y-2">
           <div>
-            <label htmlFor="fullName" className="block mb-2 font-semibold">
+            <label htmlFor="fullname" className="block mb-2 font-semibold">
               Full Name
             </label>
             <input
               type="text"
-              id="fullName"
-              name="fullName"
+              id="fullname"
+              name="fullname"
+              value={message.fullname}
+              onChange={handleChange}
               required
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
@@ -34,6 +63,22 @@ const ContactPage = () => {
               type="email"
               id="email"
               name="email"
+              value={message.email}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label htmlFor="phoneNumber" className="block mb-2 font-semibold">
+              Phone Number
+            </label>
+            <input
+              type="number"
+              id="phoneNumber"
+              name="phoneNumber"
+              value={message.phoneNumber}
+              onChange={handleChange}
               required
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
@@ -48,9 +93,12 @@ const ContactPage = () => {
               name="message"
               rows="5"
               required
+              value={message.message}
+              onChange={handleChange}
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
+
           <div className="text-center">
             {" "}
             <button
