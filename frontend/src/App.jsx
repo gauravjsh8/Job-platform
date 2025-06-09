@@ -18,6 +18,8 @@ import UpdateJob from "./pages/UpdateJob";
 import MyJobs from "./pages/MyJobs";
 import AllUsers from "./pages/AllUsers";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const location = useLocation();
@@ -39,6 +41,8 @@ function App() {
           <Route path="/jobs/:id/apply" element={<ApplyJob />} />
           <Route path="/my-jobs" element={<MyJobs />} />
           <Route path="/profile" element={<MyProfile />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
 
           <Route element={<ProtectedRoute requiredRole="admin" />}>
             <Route path="/dashboard" element={<DashboardLayout />}>
