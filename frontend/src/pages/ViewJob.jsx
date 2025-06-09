@@ -17,7 +17,7 @@ const ViewJob = () => {
         );
         setJob(response.data.job);
       } catch (error) {
-        console.log("Error fetching job:", error);
+        console.error("Error fetching job:", error);
       } finally {
         setLoading(false);
       }
@@ -34,24 +34,30 @@ const ViewJob = () => {
   }
 
   return (
-    <div className="  flex items-center justify-center mx-auto p-6">
-      <div className="bg-white shadow-md rounded-lg p-6 border w-lg border-gray-200">
+    <div className="flex justify-center p-6">
+      <div className="w-full max-w-3xl bg-white shadow-md rounded-lg p-8 border border-gray-200">
         <h2 className="text-3xl font-bold text-blue-700 mb-4">{job.title}</h2>
-        <p className="text-gray-700 mb-2">
-          <strong>Company:</strong> {job.company}
-        </p>
-        <p className="text-gray-700 mb-2">
-          <strong>Location:</strong> {job.location || "Not specified"}
-        </p>
-        <p className="text-gray-700 mb-2">
-          <strong>Salary:</strong> {job.salary || "Not mentioned"}
-        </p>
-        <p className="text-gray-700 mb-4">
-          <strong>Job Type:</strong> {job.jobType || "Not mentioned"}
-        </p>
-        <p className="text-gray-800 mb-4">
-          <strong>Description:</strong> <br /> {job.description}
-        </p>
+
+        <div className="space-y-2 text-gray-700">
+          <p>
+            <strong>Company:</strong> {job.company}
+          </p>
+          <p>
+            <strong>Location:</strong> {job.location || "Not specified"}
+          </p>
+          <p>
+            <strong>Salary:</strong> {job.salary || "Not mentioned"}
+          </p>
+          <p>
+            <strong>Job Type:</strong> {job.jobType || "Not mentioned"}
+          </p>
+        </div>
+
+        <div className="my-6">
+          <h3 className="font-semibold text-lg mb-1">Job Description:</h3>
+          <p className="text-gray-800 whitespace-pre-line">{job.description}</p>
+        </div>
+
         <p className="text-sm text-gray-500 italic mb-6">
           Posted on:{" "}
           {new Date(job.createdAt).toLocaleString("en-US", {

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthProvider";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { FaTrashAlt, FaEdit } from "react-icons/fa";
 
 const UserCreatedJobs = () => {
   const [jobs, setJobs] = useState([]);
@@ -29,7 +30,6 @@ const UserCreatedJobs = () => {
   }, [userProfile]);
 
   const handleDeleteClick = (jobId) => {
-    console.log(jobId);
     setJobToDelete(jobId);
     setShowModal(true);
   };
@@ -59,71 +59,82 @@ const UserCreatedJobs = () => {
   const handleUpdate = (id) => {
     navigate(`/dashboard/updatejob/${id}`);
   };
+
   return (
-    <div className="max-w-4xl mx-auto mt-1 p-6 bg-white shadow-md rounded-lg">
-      <h1 className="text-2xl font-bold text-gray-800 mb-4">
+    <div className="max-w-5xl mx-auto mt-8 p-6 bg-gradient-to-br from-white to-blue-50 shadow-xl rounded-xl">
+      <h1 className="text-3xl font-bold text-center text-blue-700 mb-6">
         Jobs Created by {userProfile?.name || "Loading..."}
       </h1>
 
       {jobs.length > 0 ? (
-        <ul className="space-y-4">
+        <ul className="grid sm:grid-cols-2 gap-6">
           {jobs.map((job) => (
             <li
               key={job._id}
-              className="border p-4 rounded-lg shadow-sm hover:shadow-md transition duration-200 hover:bg-blue-100"
+              className="bg-white border border-gray-200 p-6 rounded-xl shadow-md hover:shadow-lg transition-transform hover:-translate-y-1"
             >
-              <h2 className="text-xl font-semibold text-indigo-600">
+              <h2 className="text-xl font-semibold text-indigo-700 mb-1">
                 {job.title}
               </h2>
-              <p className="text-gray-600 mt-1">{job.description}</p>
-              <div className="mt-2 text-sm text-gray-500">
-                <span className="block">
-                  <strong>Company:</strong> {job.company}
-                </span>
-                <span className="block">
-                  <strong>Location:</strong> {job.location}
-                </span>
-                <span className="block">
-                  <strong>Salary:</strong> {job.salary}
-                </span>
-                <span className="block">
-                  <strong>Type:</strong> {job.jobType}
-                </span>
+              <p className="text-gray-600 mb-2">{job.description}</p>
+              <div className="text-sm space-y-1 mb-3">
+                <p>
+                  <span className="font-medium text-gray-800">Company:</span>{" "}
+                  {job.company}
+                </p>
+                <p>
+                  <span className="font-medium text-gray-800">Location:</span>{" "}
+                  {job.location}
+                </p>
+                <p>
+                  <span className="font-medium text-gray-800">Salary:</span> €
+                  {job.salary}
+                </p>
+                <p>
+                  <span className="font-medium text-gray-800">Type:</span>{" "}
+                  <span className="inline-block bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs">
+                    {job.jobType}
+                  </span>
+                </p>
               </div>
-              <div className="mt-4 flex gap-3">
+              <div className="flex gap-3 mt-4">
                 <button
                   onClick={() => handleUpdate(job._id)}
-                  className="px-4 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                  className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
                 >
-                  Update
+                  <FaEdit /> Update
                 </button>
                 <button
                   onClick={() => handleDeleteClick(job._id)}
-                  className="px-4 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700"
+                  className="flex items-center gap-2 px-4 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition"
                 >
-                  Delete
+                  <FaTrashAlt /> Delete
                 </button>
               </div>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="text-gray-500">You haven’t posted any jobs yet.</p>
+        <p className="text-center text-gray-500 mt-8">
+          You haven’t posted any jobs yet.
+        </p>
       )}
 
+      {/* Confirmation Modal */}
       {showModal && (
-        <div className="fixed  inset-0  flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg p-6 shadow-lg max-w-sm w-full">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-xl shadow-xl transform transition-all scale-100 w-80">
+            <h2 className="text-lg font-semibold text-red-600 mb-3">
               Confirm Deletion
             </h2>
-            <p className="text-gray-600 mb-6">
-              Are you sure you want to delete this job?
+            <p className="text-gray-700 mb-5">
+              Are you sure you want to delete this job? This action cannot be
+              undone.
             </p>
             <div className="flex justify-end gap-3">
               <button
                 onClick={cancelDelete}
-                className="px-4 py-2 text-sm bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+                className="px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
               >
                 Cancel
               </button>

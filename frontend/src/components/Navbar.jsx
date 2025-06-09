@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 import { FaRegUser } from "react-icons/fa";
+import { Handshake } from "lucide-react";
 
 const Navbar = () => {
   const { userProfile, logout, role } = useAuth();
@@ -34,8 +35,12 @@ const Navbar = () => {
     "text-gray-700 relative hover:text-indigo-600 hover:scale-105 transition duration-300 before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-0.5 before:bg-indigo-600 before:transition-all hover:before:w-full";
   return (
     <nav className="bg-white shadow-md py-3 px-8 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
-      <Link to="/" className="text-xl font-bold text-indigo-600">
-        Job-Platform
+      <Link
+        to="/"
+        className="text-xl font-bold text-indigo-600 flex items-center space-x-2"
+      >
+        <Handshake size={30} />
+        <span>Gaurav</span>
       </Link>
 
       <div className="flex items-center space-x-6">

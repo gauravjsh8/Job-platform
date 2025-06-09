@@ -1,10 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaMapMarkerAlt, FaMoneyBillAlt, FaBuilding } from "react-icons/fa";
 
 const PostedJobs = () => {
   const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true); // new loading state
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,7 +18,7 @@ const PostedJobs = () => {
       } catch (error) {
         console.log("ERROR", error);
       } finally {
-        setLoading(false); // fetch finished
+        setLoading(false);
       }
     };
     fetchJobs();
@@ -25,67 +26,72 @@ const PostedJobs = () => {
 
   if (loading) {
     return (
-      <div className="max-w-5xl mx-auto p-6">
-        <h2 className="text-3xl font-bold mb-6">Posted Jobs</h2>
-        <p>Loading jobs...</p>
+      <div className="max-w-6xl mx-auto p-8">
+        <h2 className="text-4xl font-bold mb-6 text-center text-blue-700">
+          Posted Jobs
+        </h2>
+        <p className="text-center text-gray-600">Loading jobs...</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
-      <h2 className="text-3xl font-bold mb-6">Posted Jobs</h2>
+    <div className="max-w-6xl mx-auto p-8">
+      <h2 className="text-4xl font-bold mb-10 text-center text-blue-700">
+        Available Job Listings
+      </h2>
       {jobs.length === 0 ? (
-        <p>No jobs available.</p>
+        <p className="text-center text-gray-500 text-lg">
+          No jobs available right now.
+        </p>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid md:grid-cols-2 gap-8">
           {jobs.map((job) => (
             <div
               key={job._id}
-              className="border border-gray-300 rounded p-4 shadow-sm hover:shadow-md transition"
+              className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl border border-gray-200 transition duration-300"
             >
-              <h3 className="text-xl font-semibold mb-2">{job.title}</h3>
-              <p className="text-gray-700 mb-1">
-                <span className="font-semibold">Company:</span> {job.company}
-              </p>
-              <p className="text-gray-700 mb-1">
-                <span className="font-semibold">Location:</span>{" "}
+              <h3 className="text-2xl font-semibold text-gray-800 mb-2">
+                {job.title}
+              </h3>
+              <div className="flex items-center gap-2 text-gray-600 text-sm mb-1">
+                <FaBuilding className="text-blue-500" />
+                {job.company}
+              </div>
+              <div className="flex items-center gap-2 text-gray-600 text-sm mb-1">
+                <FaMapMarkerAlt className="text-green-500" />
                 {job.location || "Not specified"}
-              </p>
-              <p className="text-gray-700 mb-1">
-                <span className="font-semibold">Salary:</span>{" "}
+              </div>
+              <div className="flex items-center gap-2 text-gray-600 text-sm mb-2">
+                <FaMoneyBillAlt className="text-yellow-500" />
                 {job.salary || "Not mentioned"}
-              </p>
-              <p className="text-gray-700 mb-2">
-                <span className="font-semibold">Description:</span>{" "}
+              </div>
+              <p className="text-gray-700 text-sm mb-2 line-clamp-3">
                 {job.description}
               </p>
-              <p className="text-sm text-gray-500 italic">
+              <p className="text-xs text-gray-500 italic mb-4">
                 Type: {job.jobType || "Not mentioned"}
               </p>
-              <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center mt-4 gap-2">
-                <p className="text-sm text-gray-500 italic">
+              <div className="flex justify-between items-center text-sm text-gray-500">
+                <span>
                   Posted on:{" "}
-                  {new Date(job.createdAt).toLocaleString("en-US", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
+                  {new Date(job.createdAt).toLocaleDateString("en-US", {
+                    weekday: "short",
+                    month: "short",
                     day: "numeric",
-                    hour: "numeric",
-                    minute: "2-digit",
-                    hour12: true,
+                    year: "numeric",
                   })}
-                </p>
+                </span>
                 <div className="flex gap-3">
                   <button
                     onClick={() => navigate(`/jobs/${job._id}`)}
-                    className="px-4 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                    className="px-4 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white"
                   >
                     View
                   </button>
                   <button
                     onClick={() => navigate(`/jobs/${job._id}/apply`)}
-                    className="px-4 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600 transition"
+                    className="px-4 py-1 rounded bg-green-600 hover:bg-green-700 text-white"
                   >
                     Apply
                   </button>
