@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../utils/utils";
 
 const RegistrationPage = () => {
@@ -192,9 +192,9 @@ const RegistrationPage = () => {
 
         <p className="mt-4 text-sm text-center text-gray-600">
           Already have an account?{" "}
-          <a href="/login" className="text-pink-500 hover:underline">
+          <Link href="/login" className="text-pink-500 hover:underline">
             Login
-          </a>
+          </Link>
         </p>
       </div>
     </div>
