@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { MdExpandMore } from "react-icons/md";
 import { API_BASE_URL } from "../utils/utils";
 
 const AppliedJobsList = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [expandedApplicants, setExpandedApplicants] = useState({});
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -28,137 +26,73 @@ const AppliedJobsList = () => {
     fetchJobs();
   }, []);
 
-  const toggleApplicant = (jobId, applicantId) => {
-    const key = `${jobId}-${applicantId}`;
-    setExpandedApplicants((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
-
   if (loading) {
     return (
-      <div style={{ textAlign: "center", padding: 40 }}>
-        <div className="loader"></div>
-        <p>Loading...</p>
+      <div className="text-center py-10">
+        <div className="loader mb-2"></div>
+        <p className="text-gray-700">Loading...</p>
       </div>
     );
   }
 
   if (error) {
-    return <div style={{ color: "red", textAlign: "center" }}>{error}</div>;
+    return <div className="text-red-600 text-center">{error}</div>;
   }
 
   if (jobs.length === 0) {
     return (
-      <div style={{ textAlign: "center" }}>No jobs with applicants found.</div>
+      <div className="text-center text-gray-600">
+        No jobs with applicants found.
+      </div>
     );
   }
 
   return (
-    <div style={{ maxWidth: 800, margin: "auto", padding: 20 }}>
-      <h2 style={{ textAlign: "center", marginBottom: 30 }}>
+    <div className="max-w-3xl mx-auto p-5">
+      <h2 className="text-2xl font-semibold text-center mb-8">
         Jobs & Applicants
       </h2>
 
       {jobs.map((job) => (
         <div
           key={job._id}
-          style={{
-            border: "1px solid #ccc",
-            borderRadius: 6,
-            padding: 16,
-            marginBottom: 24,
-            backgroundColor: "#f9f9f9",
-          }}
+          className="border border-gray-300 rounded-md p-4 mb-6 bg-gray-50"
         >
-          <h3 style={{ marginBottom: 4 }}>{job.title}</h3>
-          <div style={{ color: "#555", marginBottom: 12, fontSize: 14 }}>
+          <h3 className="text-xl font-semibold mb-1">{job.title}</h3>
+          <p className="text-sm text-gray-700 mb-3">
             <strong>Company:</strong> {job.company} | <strong>Location:</strong>{" "}
             {job.location} | <strong>Type:</strong> {job.jobType}
-          </div>
+          </p>
 
           {job.applicants.length === 0 ? (
-            <div style={{ color: "#777", fontStyle: "italic" }}>
-              No applicants yet.
-            </div>
+            <p className="text-gray-500 italic">No applicants yet.</p>
           ) : (
-            <div>
-              {job.applicants.map((applicant) => {
-                const key = `${job._id}-${applicant._id}`;
-                const isExpanded = !!expandedApplicants[key];
-
-                return (
-                  <div
-                    key={applicant._id}
-                    style={{
-                      borderTop: "1px solid #ddd",
-                      padding: "10px 0",
-                    }}
-                  >
-                    <button
-                      onClick={() => toggleApplicant(job._id, applicant._id)}
-                      aria-expanded={isExpanded}
-                      aria-controls={`applicant-details-${key}`}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        width: "100%",
-                        textAlign: "left",
-                        padding: 0,
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        fontSize: 16,
-                        fontWeight: 500,
-                        color: "#222",
-                      }}
+            <div className="space-y-4">
+              {job.applicants.map((applicant) => (
+                <div
+                  key={applicant._id}
+                  className="border-t border-gray-200 pt-2"
+                >
+                  <p className="font-medium text-gray-800">
+                    {applicant.userId?.name} ({applicant.userId?.email})
+                  </p>
+                  <p className="text-sm text-gray-700">
+                    <strong>Applied At:</strong>{" "}
+                    {new Date(applicant.appliedAt).toLocaleString()}
+                  </p>
+                  <p className="text-sm text-gray-700">
+                    <strong>Resume:</strong>{" "}
+                    <a
+                      href={applicant.resumeUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-blue-600 underline"
                     >
-                      <span>
-                        {applicant.userId?.name} ({applicant.userId?.email})
-                      </span>
-                      <MdExpandMore
-                        size={24}
-                        style={{
-                          transform: isExpanded
-                            ? "rotate(180deg)"
-                            : "rotate(0deg)",
-                          transition: "transform 0.3s ease",
-                        }}
-                      />
-                    </button>
-
-                    {isExpanded && (
-                      <div
-                        id={`applicant-details-${key}`}
-                        style={{
-                          marginTop: 8,
-                          paddingLeft: 12,
-                          fontSize: 14,
-                          color: "#333",
-                        }}
-                      >
-                        <div>
-                          <strong>Applied At:</strong>{" "}
-                          {new Date(applicant.appliedAt).toLocaleString()}
-                        </div>
-                        <div>
-                          <strong>Resume:</strong>{" "}
-                          <a
-                            href={applicant.resumeUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            style={{ color: "#1a0dab" }}
-                          >
-                            View Resume
-                          </a>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+                      View Resume
+                    </a>
+                  </p>
+                </div>
+              ))}
             </div>
           )}
         </div>
