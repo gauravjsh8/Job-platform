@@ -47,6 +47,6 @@ jobRouter.get("/jobappliedbyuser", authUser, jobAppliedByUser);
 jobRouter.get(
   "/jobapplicantdetails",
   authUser,
-  isAdmin("superAdmin", "admin"),
+  isAdmin("superadmin", "admin"),
   getJobsWithApplicants
 );
