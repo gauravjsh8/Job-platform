@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { API_BASE_URL } from "../utils/utils";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -23,7 +24,7 @@ const ResetPassword = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/users/reset-password/${token}`,
+        `${API_BASE_URL}/api/users/reset-password/${token}`,
         { password },
         {
           headers: { "Content-Type": "application/json" },

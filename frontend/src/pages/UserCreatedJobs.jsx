@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthProvider";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
+import { API_BASE_URL } from "../utils/utils";
 
 const UserCreatedJobs = () => {
   const [jobs, setJobs] = useState([]);
@@ -16,10 +17,9 @@ const UserCreatedJobs = () => {
   useEffect(() => {
     const jobByUser = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/api/jobs/jobbyuser`,
-          { withCredentials: true }
-        );
+        const response = await axios.get(`${API_BASE_URL}/api/jobs/jobbyuser`, {
+          withCredentials: true,
+        });
         setJobs(response.data.jobs);
       } catch (error) {
         console.error("Error fetching jobs:", error);
@@ -36,12 +36,9 @@ const UserCreatedJobs = () => {
 
   const confirmDelete = async () => {
     try {
-      await axios.delete(
-        `http://localhost:3000/api/jobs/deletejob/${jobToDelete}`,
-        {
-          withCredentials: true,
-        }
-      );
+      await axios.delete(`${API_BASE_URL}/api/jobs/deletejob/${jobToDelete}`, {
+        withCredentials: true,
+      });
       setJobs((prevJobs) => prevJobs.filter((job) => job._id !== jobToDelete));
       setShowModal(false);
       toast.success("Job deleted successfully");

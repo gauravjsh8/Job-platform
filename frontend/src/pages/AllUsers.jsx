@@ -3,6 +3,7 @@ import axios from "axios";
 import { FiTrash2 } from "react-icons/fi";
 import { useAuth } from "../context/AuthProvider";
 import toast from "react-hot-toast";
+import { API_BASE_URL } from "../utils/utils";
 const AllUsers = () => {
   const { role: loggedInUserRole, userProfile } = useAuth();
   const [users, setUsers] = useState([]);
@@ -46,13 +47,12 @@ const AllUsers = () => {
   const executeDelete = async (userId) => {
     handleCloseConfirmModal();
     try {
-      await axios.delete(
-        `http://localhost:3000/api/users/delete-user/${userId}`,
-        { withCredentials: true }
-      );
+      await axios.delete(`${API_BASE_URL}/api/users/delete-user/${userId}`, {
+        withCredentials: true,
+      });
       toast.success("User deleted successfully.");
       const response = await axios.get(
-        `http://localhost:3000/api/users/allusers?page=${page}&limit=${limit}`,
+        `${API_BASE_URL}/api/users/allusers?page=${page}&limit=${limit}`,
         { withCredentials: true }
       );
       setUsers(response.data.users);
@@ -89,7 +89,7 @@ const AllUsers = () => {
       async () => {
         try {
           await axios.put(
-            `http://localhost:3000/api/users/update-user/${userId}`,
+            `${API_BASE_URL}/api/users/update-user/${userId}`,
             { role: newRole },
             { withCredentials: true }
           );

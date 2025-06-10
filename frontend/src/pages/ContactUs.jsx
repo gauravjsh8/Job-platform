@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { API_BASE_URL } from "../utils/utils";
 
 const ContactPage = () => {
   const [message, setMessage] = useState({
@@ -18,7 +19,7 @@ const ContactPage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/messages/send-message",
+        `${API_BASE_URL}/api/messages/send-message`,
         message,
         {
           headers: {

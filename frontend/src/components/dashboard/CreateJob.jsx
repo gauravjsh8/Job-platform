@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../utils/utils";
 
 const CreateJob = () => {
   const jobInfo = {
@@ -24,7 +25,7 @@ const CreateJob = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/jobs/create-job",
+        `${API_BASE_URL}/api/jobs/create-job`,
         postJob,
         {
           withCredentials: true,

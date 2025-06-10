@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
+import { API_BASE_URL } from "../utils/utils";
 
 function ApplyJob() {
   const { id } = useParams();
@@ -24,7 +25,7 @@ function ApplyJob() {
     try {
       setIsSubmitting(true);
       const response = await axios.post(
-        `http://localhost:3000/api/jobs/${id}/applyjob`,
+        `${API_BASE_URL}/api/jobs/${id}/applyjob`,
         formData,
         {
           headers: {

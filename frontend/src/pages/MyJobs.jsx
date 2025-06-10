@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthProvider";
+import { API_BASE_URL } from "../utils/utils";
 
 const MyJobs = () => {
   const { userProfile } = useAuth();
@@ -12,7 +13,7 @@ const MyJobs = () => {
     const fetchMyJobs = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/jobs/jobappliedbyuser`,
+          `${API_BASE_URL}/api/jobs/jobappliedbyuser`,
           {
             withCredentials: true,
           }

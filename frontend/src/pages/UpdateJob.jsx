@@ -3,6 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
+import { API_BASE_URL } from "../utils/utils";
 
 const UpdateJob = () => {
   const jobInfo = {
@@ -28,7 +29,7 @@ const UpdateJob = () => {
     const fetchJob = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/jobs/getsinglejob/${id}`,
+          `${API_BASE_URL}/api/jobs/getsinglejob/${id}`,
           { withCredentials: true }
         );
         console.log(response.data);

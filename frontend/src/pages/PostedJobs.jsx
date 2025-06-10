@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaMapMarkerAlt, FaMoneyBillAlt, FaBuilding } from "react-icons/fa";
+import { API_BASE_URL } from "../utils/utils";
 
 const PostedJobs = () => {
   const [jobs, setJobs] = useState([]);
@@ -15,7 +16,7 @@ const PostedJobs = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/jobs/getalljobs?page=${pageNum}&limit=${limit}`
+        `${API_BASE_URL}/api/jobs/getalljobs?page=${pageNum}&limit=${limit}`
       );
 
       setJobs(response.data.jobs);

@@ -3,6 +3,7 @@ import React from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../utils/utils";
 
 const RegistrationPage = () => {
   const navigate = useNavigate();
@@ -63,7 +64,7 @@ const RegistrationPage = () => {
     formData.append("name", user.name);
     formData.append("email", user.email);
     formData.append("password", user.password);
-    formData.append("role", user.role); // Role is always 'user'
+    formData.append("role", user.role);
     formData.append("photo", photo);
 
     try {
@@ -72,7 +73,7 @@ const RegistrationPage = () => {
         formData
       );
       toast.success(response.data.message);
-      setUser({ name: "", email: "", password: "", role: "user" }); // Resetting to default 'user'
+      setUser({ name: "", email: "", password: "", role: "user" });
       setPhoto(null);
       setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
@@ -178,7 +179,6 @@ const RegistrationPage = () => {
             )}
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={submitting}

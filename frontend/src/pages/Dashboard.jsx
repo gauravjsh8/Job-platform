@@ -2,13 +2,14 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthProvider";
+import { API_BASE_URL } from "../utils/utils";
 function DashboardLayout() {
   const navigate = useNavigate();
   const { setUserProfile } = useAuth();
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:3000/api/users/logout",
+        `${API_BASE_URL}/api/users/logout`,
         {},
         {
           withCredentials: true,

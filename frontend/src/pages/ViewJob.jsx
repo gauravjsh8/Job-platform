@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../utils/utils";
 
 const ViewJob = () => {
   const { id } = useParams();
@@ -13,7 +14,7 @@ const ViewJob = () => {
     const fetchJob = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/jobs/getsinglejob/${id}`
+          `${API_BASE_URL}/api/jobs/getsinglejob/${id}`
         );
         setJob(response.data.job);
       } catch (error) {

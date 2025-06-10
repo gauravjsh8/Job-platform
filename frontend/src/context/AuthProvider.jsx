@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../utils/utils";
 
 const AuthContext = createContext();
 
@@ -11,10 +12,9 @@ export const AuthProvider = ({ children }) => {
   const fetchUser = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(
-        "http://localhost:3000/api/users/user-profile",
-        { withCredentials: true }
-      );
+      const res = await axios.get(`${API_BASE_URL}/api/users/user-profile`, {
+        withCredentials: true,
+      });
       setUserProfile(res.data);
       setRole(res.data.role);
       console.log(res.data);

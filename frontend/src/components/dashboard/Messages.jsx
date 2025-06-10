@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../../utils/utils";
 
 function Messages() {
   const [messages, setMessages] = useState([]);
@@ -8,7 +9,7 @@ function Messages() {
     const fetchMessages = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/messages/get-all-messages",
+          `${API_BASE_URL}/api/messages/get-all-messages`,
           {
             withCredentials: true,
           }
