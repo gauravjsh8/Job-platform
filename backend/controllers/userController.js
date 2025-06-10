@@ -97,11 +97,18 @@ export const loginUser = async (req, res) => {
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   sameSite: "strict",
+    //   maxAge: 24 * 60 * 60 * 1000,
+    //   secure: process.env.NODE_ENV === "production",
+    // });
+
     res.cookie("token", token, {
-      httpOnly: true,
-      sameSite: "strict",
+      httpOnly: false,
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
     });
 
     const userResponse = existingUser.toObject();
@@ -287,12 +294,10 @@ export const updateUserRole = async (req, res) => {
       userToUpdate._id.toString() === req.user.userId.toString() &&
       role !== "superadmin"
     ) {
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: "A superadmin cannot demote their own role.",
-        });
+      return res.status(403).json({
+        success: false,
+        message: "A superadmin cannot demote their own role.",
+      });
     }
 
     if (userToUpdate.role === "superadmin" && role !== "superadmin") {
@@ -301,12 +306,10 @@ export const updateUserRole = async (req, res) => {
         superadminCount === 1 &&
         userToUpdate._id.toString() === req.user.userId.toString()
       ) {
-        return res
-          .status(403)
-          .json({
-            success: false,
-            message: "Cannot demote the last superadmin.",
-          });
+        return res.status(403).json({
+          success: false,
+          message: "Cannot demote the last superadmin.",
+        });
       }
     }
 
