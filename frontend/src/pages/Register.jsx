@@ -1,5 +1,6 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -10,7 +11,7 @@ const RegistrationPage = () => {
     name: "",
     email: "",
     password: "",
-    role: "user",
+    role: "user", // Default role set here
   });
 
   const [photo, setPhoto] = useState(null);
@@ -62,7 +63,7 @@ const RegistrationPage = () => {
     formData.append("name", user.name);
     formData.append("email", user.email);
     formData.append("password", user.password);
-    formData.append("role", user.role);
+    formData.append("role", user.role); // Role is always 'user'
     formData.append("photo", photo);
 
     try {
@@ -71,7 +72,7 @@ const RegistrationPage = () => {
         formData
       );
       toast.success(response.data.message);
-      setUser({ name: "", email: "", password: "", role: "user" });
+      setUser({ name: "", email: "", password: "", role: "user" }); // Resetting to default 'user'
       setPhoto(null);
       setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
@@ -153,22 +154,6 @@ const RegistrationPage = () => {
             )}
           </div>
 
-          {/* Role */}
-          <div>
-            <label htmlFor="role" className="block text-gray-700 mb-1">
-              Role
-            </label>
-            <select
-              name="role"
-              value={user.role}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded border border-gray-300"
-            >
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-
           {/* Photo Upload */}
           <div>
             <label htmlFor="photo" className="block text-gray-700 mb-1">
@@ -179,7 +164,7 @@ const RegistrationPage = () => {
               name="photo"
               accept="image/*"
               onChange={handlePhotoChange}
-              className={`w-full ${
+              className={`border border-gray-300 rounded-lg p-2 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" w-full ${
                 errors.photo ? "border border-red-500" : ""
               }`}
             />

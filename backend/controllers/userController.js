@@ -132,6 +132,33 @@ export const logoutUser = async (req, res) => {
   });
 };
 
+export const deleteUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const userToDelete = await User.findById(userId);
+
+    if (!userToDelete) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found." });
+    }
+
+    if (userToDelete.role === "superadmin") {
+      return res.status(401).json({
+        success: false,
+        message: "Access denied.You can't delete Superadmins",
+      });
+    }
+    await User.findOneAndDelete(userToDelete);
+    res
+      .status(200)
+      .json({ success: true, message: "User deleted successfully." });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Server error." });
+  }
+};
+
 export const userProfile = async (req, res) => {
   const userId = req.user.userId;
   const user = await User.findById(userId);
@@ -142,8 +169,19 @@ export const allUsers = async (req, res) => {
   try {
     const userId = req.user.userId;
 
-    const users = await User.find();
-    res.status(200).json({ users: users });
+    const { page = 1, limit = 10 } = req.query;
+
+    const users = await User.find()
+      .limit(Number(limit))
+      .skip((page - 1) * limit);
+
+    const total = await User.countDocuments(users);
+    res.status(200).json({
+      users: users,
+      limit: Number(limit),
+      page: Number(page),
+      total: total,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error" });
@@ -221,5 +259,67 @@ export const resetPassword = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Something went wrong." });
+  }
+};
+
+export const updateUserRole = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    const allowedRoles = ["user", "admin", "superadmin"];
+    if (!allowedRoles.includes(role)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid role specified." });
+    }
+
+    const userToUpdate = await User.findById(id);
+
+    if (!userToUpdate) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found." });
+    }
+
+    if (
+      req.user.role === "superadmin" &&
+      userToUpdate._id.toString() === req.user.userId.toString() &&
+      role !== "superadmin"
+    ) {
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: "A superadmin cannot demote their own role.",
+        });
+    }
+
+    if (userToUpdate.role === "superadmin" && role !== "superadmin") {
+      const superadminCount = await User.countDocuments({ role: "superadmin" });
+      if (
+        superadminCount === 1 &&
+        userToUpdate._id.toString() === req.user.userId.toString()
+      ) {
+        return res
+          .status(403)
+          .json({
+            success: false,
+            message: "Cannot demote the last superadmin.",
+          });
+      }
+    }
+
+    userToUpdate.role = role;
+    await userToUpdate.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: `User role updated to ${role}.` });
+  } catch (error) {
+    console.error("Error updating user role:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Server error during role update." });
   }
 };

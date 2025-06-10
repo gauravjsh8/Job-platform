@@ -18,6 +18,6 @@ contactRouter.post(
 contactRouter.get(
   "/get-all-messages",
   authUser,
-  isAdmin("admin"),
+  isAdmin("admin", "superadmin"),
   getAllMessages
 );

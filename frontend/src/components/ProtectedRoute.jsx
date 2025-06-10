@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import { useEffect } from "react";
+
+const navigate = useNavigate;
 
 const ProtectedRoute = ({ requiredRole }) => {
-  const navigate = useNavigate();
   const { userProfile, loading } = useAuth();
   const [allowed, setAllowed] = useState(false);
 
@@ -13,7 +15,7 @@ const ProtectedRoute = ({ requiredRole }) => {
       if (!userProfile) {
         navigate("/login");
         toast.error("Access Denied");
-      } else if (requiredRole && userProfile.role !== requiredRole) {
+      } else if (requiredRole && !requiredRole.includes(userProfile.role)) {
         navigate("/");
         toast.error("Access Denied");
       } else {

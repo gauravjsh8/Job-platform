@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+  const navigate = useNavigate();
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 space-y-20">
       {/* Hero Section */}
@@ -52,7 +54,10 @@ const HomePage = () => {
         <p className="text-gray-600 mb-6">
           Find your dream job or post openings to hire top talent today.
         </p>
-        <button className="px-6 py-3 bg-blue-600 text-white text-lg rounded-full hover:bg-blue-700 transition">
+        <button
+          className="px-6 py-3 bg-blue-600 text-white text-lg rounded-full hover:bg-blue-700 transition cursor-pointer"
+          onClick={() => navigate("/jobs")}
+        >
           Get Started
         </button>
       </div>

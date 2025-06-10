@@ -1,7 +1,6 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import RegistrationPage from "./pages/Register";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
 import LoginPage from "./pages/Login";
 import Navbar from "./components/Navbar";
 import ContactPage from "./pages/ContactUs";
@@ -21,16 +20,17 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Messages from "./components/dashboard/Messages";
+import Footer from "./components/Footer";
 
 function App() {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith("/dashboard");
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       {!isDashboard && <Navbar />}
 
-      <div className={!isDashboard ? "pt-14" : ""}>
+      <div className={`flex-grow ${!isDashboard ? "pt-14" : ""}`}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<RegistrationPage />} />
@@ -45,7 +45,9 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
 
-          <Route element={<ProtectedRoute requiredRole="admin" />}>
+          <Route
+            element={<ProtectedRoute requiredRole={["superadmin", "admin"]} />}
+          >
             <Route path="/dashboard" element={<DashboardLayout />}>
               <Route path="/dashboard/create-job" element={<CreateJob />} />
               <Route index element={<DashboardHome />} />
@@ -61,6 +63,8 @@ function App() {
           </Route>
         </Routes>
       </div>
+
+      {!isDashboard && <Footer />}
     </div>
   );
 }
