@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       await axios.post(
-        "http://localhost:3000/api/users/logout",
+        `${API_BASE_URL}/api/users/logout`,
         {},
         { withCredentials: true }
       );
