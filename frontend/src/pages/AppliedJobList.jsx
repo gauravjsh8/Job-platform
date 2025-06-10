@@ -13,7 +13,8 @@ const AppliedJobsList = () => {
     const fetchJobs = async () => {
       try {
         const { data } = await axios.get(
-          `${API_BASE_URL}/api/jobs/jobapplicantdetails`
+          `${API_BASE_URL}/api/jobs/jobapplicantdetails`,
+          { withCredentials: true }
         );
         setJobs(data.jobs || []);
       } catch (err) {
