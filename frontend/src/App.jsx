@@ -61,7 +61,7 @@ function App() {
               <Route path="/dashboard/all-users" element={<AllUsers />} />
               <Route path="/dashboard/messages" element={<Messages />} />
               <Route
-                path="/dashboard//applied/jobs"
+                path="/dashboard/appliedjobs"
                 element={<AppliedJobsList />}
               />
             </Route>

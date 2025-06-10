@@ -148,7 +148,7 @@ function DashboardLayout() {
             </li>
             <li>
               <Link
-                to="/dashboard/messages"
+                to="/dashboard/appliedjobs"
                 className="flex items-center px-4 py-2 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200"
               >
                 <svg
