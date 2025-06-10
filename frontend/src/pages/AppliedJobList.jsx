@@ -12,7 +12,9 @@ const AppliedJobsList = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const { data } = await axios.get(`${API_BASE_URL}/jobapplicantdetails`);
+        const { data } = await axios.get(
+          `${API_BASE_URL}/api/jobs/jobapplicantdetails`
+        );
         setJobs(data.jobs || []);
       } catch (err) {
         console.error(err);
