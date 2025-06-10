@@ -1,5 +1,3 @@
-// src/pages/AppliedJobsList.jsx
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MdExpandMore } from "react-icons/md";
@@ -18,7 +16,7 @@ const AppliedJobsList = () => {
           `${API_BASE_URL}/api/jobs/jobapplicantdetails`,
           { withCredentials: true }
         );
-        setJobs(data.jobs || []);
+        setJobs(data.data || []);
       } catch (err) {
         console.error("Error fetching jobs:", err);
         setError("Failed to fetch jobs.");
