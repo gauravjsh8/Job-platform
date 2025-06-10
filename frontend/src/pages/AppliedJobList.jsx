@@ -1,3 +1,5 @@
+// src/pages/AppliedJobsList.jsx
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MdExpandMore } from "react-icons/md";
@@ -18,7 +20,7 @@ const AppliedJobsList = () => {
         );
         setJobs(data.jobs || []);
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching jobs:", err);
         setError("Failed to fetch jobs.");
       } finally {
         setLoading(false);
@@ -29,20 +31,18 @@ const AppliedJobsList = () => {
   }, []);
 
   const toggleApplicant = (jobId, applicantId) => {
-    setExpandedApplicants((prev) => {
-      const key = `${jobId}-${applicantId}`;
-      return {
-        ...prev,
-        [key]: !prev[key],
-      };
-    });
+    const key = `${jobId}-${applicantId}`;
+    setExpandedApplicants((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
   };
 
   if (loading) {
     return (
       <div style={{ textAlign: "center", padding: 40 }}>
         <div className="loader"></div>
-        Loading...
+        <p>Loading...</p>
       </div>
     );
   }
@@ -59,7 +59,9 @@ const AppliedJobsList = () => {
 
   return (
     <div style={{ maxWidth: 800, margin: "auto", padding: 20 }}>
-      <h2 style={{ textAlign: "center" }}>Jobs & Applicants</h2>
+      <h2 style={{ textAlign: "center", marginBottom: 30 }}>
+        Jobs & Applicants
+      </h2>
 
       {jobs.map((job) => (
         <div
@@ -69,17 +71,19 @@ const AppliedJobsList = () => {
             borderRadius: 6,
             padding: 16,
             marginBottom: 24,
-            backgroundColor: "#fafafa",
+            backgroundColor: "#f9f9f9",
           }}
         >
           <h3 style={{ marginBottom: 4 }}>{job.title}</h3>
           <div style={{ color: "#555", marginBottom: 12, fontSize: 14 }}>
-            Company: {job.company} | Location: {job.location} | Type:{" "}
-            {job.jobType}
+            <strong>Company:</strong> {job.company} | <strong>Location:</strong>{" "}
+            {job.location} | <strong>Type:</strong> {job.jobType}
           </div>
 
           {job.applicants.length === 0 ? (
-            <div>No applicants yet.</div>
+            <div style={{ color: "#777", fontStyle: "italic" }}>
+              No applicants yet.
+            </div>
           ) : (
             <div>
               {job.applicants.map((applicant) => {
@@ -91,8 +95,7 @@ const AppliedJobsList = () => {
                     key={applicant._id}
                     style={{
                       borderTop: "1px solid #ddd",
-                      paddingTop: 8,
-                      paddingBottom: 8,
+                      padding: "10px 0",
                     }}
                   >
                     <button
@@ -110,12 +113,12 @@ const AppliedJobsList = () => {
                         alignItems: "center",
                         justifyContent: "space-between",
                         fontSize: 16,
-                        fontWeight: "bold",
+                        fontWeight: 500,
                         color: "#222",
                       }}
                     >
                       <span>
-                        {applicant.userId.name} ({applicant.userId.email})
+                        {applicant.userId?.name} ({applicant.userId?.email})
                       </span>
                       <MdExpandMore
                         size={24}
@@ -139,11 +142,11 @@ const AppliedJobsList = () => {
                         }}
                       >
                         <div>
-                          Applied At:{" "}
+                          <strong>Applied At:</strong>{" "}
                           {new Date(applicant.appliedAt).toLocaleString()}
                         </div>
                         <div>
-                          Resume:{" "}
+                          <strong>Resume:</strong>{" "}
                           <a
                             href={applicant.resumeUrl}
                             target="_blank"
