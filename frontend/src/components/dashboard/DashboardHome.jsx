@@ -12,7 +12,6 @@ function DashboardHome() {
         Also, view how many applicants have applied for the jobs, and manage
         your postings easily.
       </p>
-      {/* Add any other info or quick links */}
     </div>
   );
 }
