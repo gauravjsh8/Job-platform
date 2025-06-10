@@ -109,7 +109,6 @@ const RegistrationPage = () => {
             )}
           </div>
 
-          {/* Email */}
           <div>
             <label htmlFor="email" className="block text-gray-700 mb-1">
               Email
@@ -128,7 +127,6 @@ const RegistrationPage = () => {
             )}
           </div>
 
-          {/* Password with toggle */}
           <div>
             <label htmlFor="password" className="block text-gray-700 mb-1">
               Password
@@ -155,7 +153,6 @@ const RegistrationPage = () => {
             )}
           </div>
 
-          {/* Photo Upload */}
           <div>
             <label htmlFor="photo" className="block text-gray-700 mb-1">
               Upload Photo
@@ -192,7 +189,7 @@ const RegistrationPage = () => {
 
         <p className="mt-4 text-sm text-center text-gray-600">
           Already have an account?{" "}
-          <Link href="/login" className="text-pink-500 hover:underline">
+          <Link to="/login" className="text-pink-500 hover:underline">
             Login
           </Link>
         </p>
