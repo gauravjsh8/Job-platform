@@ -126,18 +126,24 @@ export const loginUser = async (req, res) => {
   }
 };
 
-export const logoutUser = async (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    sameSite: "strict",
-    secure: process.env.NODE_ENV === "production",
-  });
+// export const logoutUser = async (req, res) => {
+//   res.clearCookie("token", {
+//     httpOnly: true,
+//     sameSite: "strict",
+//     secure: process.env.NODE_ENV === "production",
+//   });
 
-  return res.status(200).json({
-    success: true,
-    message: "User logged out successfully.",
-  });
-};
+//   return res.status(200).json({
+//     success: true,
+//     message: "User logged out successfully.",
+//   });
+// };
+
+res.cookie("token", token, {
+  hhttpOnly: false,
+  sameSite: "none",
+  secure: true,
+});
 
 export const deleteUser = async (req, res) => {
   try {
