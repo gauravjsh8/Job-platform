@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
-import { BACKEND_URL } from "../utils/utils";
+import { API_BASE_URL } from "../utils/utils";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -33,10 +33,14 @@ const LoginPage = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post(`${BACKEND_URL}/login`, user, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        `${API_BASE_URL}/api/users/login`,
+        user,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
       const data = response.data;
       await fetchUser();
       setUserProfile(data.user);

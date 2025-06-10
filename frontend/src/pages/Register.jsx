@@ -68,7 +68,7 @@ const RegistrationPage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/users/register",
+        `${API_BASE_URL}/api/users/register`,
         formData
       );
       toast.success(response.data.message);
