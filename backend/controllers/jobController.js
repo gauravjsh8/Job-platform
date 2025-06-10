@@ -301,9 +301,6 @@ export const getJobsWithApplicants = async (req, res) => {
     const userId = req.user.userId;
 
     const user = await User.findById(userId);
-    if (!user || user.role !== "superadmin") {
-      return res.status(403).json({ success: false, message: "Unauthorized" });
-    }
 
     const jobs = await Job.find({})
       .populate("postedBy", "name email role")
