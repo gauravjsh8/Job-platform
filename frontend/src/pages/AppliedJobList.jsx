@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MdExpandMore } from "react-icons/md";
+import { API_BASE_URL } from "../utils/utils";
 
 const AppliedJobsList = () => {
   const [jobs, setJobs] = useState([]);
