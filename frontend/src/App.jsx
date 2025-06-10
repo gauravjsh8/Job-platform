@@ -21,6 +21,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Messages from "./components/dashboard/Messages";
 import Footer from "./components/Footer";
+import AppliedJobsList from "./pages/AppliedJobList";
 
 function App() {
   const location = useLocation();
@@ -59,6 +60,10 @@ function App() {
               <Route path="/dashboard/updatejob/:id" element={<UpdateJob />} />
               <Route path="/dashboard/all-users" element={<AllUsers />} />
               <Route path="/dashboard/messages" element={<Messages />} />
+              <Route
+                path="/dashboard//applied/jobs"
+                element={<AppliedJobsList />}
+              />
             </Route>
           </Route>
         </Routes>

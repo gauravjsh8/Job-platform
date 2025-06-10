@@ -295,3 +295,31 @@ export const jobAppliedByUser = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error." });
   }
 };
+
+export const getJobsWithApplicants = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const user = await User.findById(userId);
+    if (!user || user.role !== "superadmin") {
+      return res.status(403).json({ success: false, message: "Unauthorized" });
+    }
+
+    const jobs = await Job.find({})
+      .populate("postedBy", "name email role")
+      .populate({
+        path: "applicants.userId",
+        select: "name email role photoUrl",
+      })
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      message: "Jobs with applicants fetched successfully",
+      data: jobs,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Server Error" });
+  }
+};

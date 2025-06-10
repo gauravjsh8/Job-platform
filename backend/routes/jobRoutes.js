@@ -1,11 +1,12 @@
 import express from "express";
 
-import { authUser } from "../middleware/authMiddleware.js";
+import { authUser, isAdmin } from "../middleware/authMiddleware.js";
 import {
   applyJob,
   createJobs,
   deleteJob,
   getAllJobs,
+  getJobsWithApplicants,
   getSingleJob,
   jobAppliedByUser,
   myJob,
@@ -42,3 +43,10 @@ jobRouter.post("/:id/applyjob", authUser, upload.single("resume"), applyJob);
 
 jobRouter.get("/jobbyuser", authUser, userCreatedJob);
 jobRouter.get("/jobappliedbyuser", authUser, jobAppliedByUser);
+
+jobRouter.get(
+  "/jobapplicantdetails",
+  authUser,
+  isAdmin("superAdmin", "admin"),
+  getJobsWithApplicants
+);
