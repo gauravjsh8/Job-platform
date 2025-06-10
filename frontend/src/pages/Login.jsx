@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 import { API_BASE_URL } from "../utils/utils";
 
@@ -127,22 +127,22 @@ const LoginPage = () => {
           </button>
         </form>
         <div className="mt-4 text-center">
-          <a
+          <Link
             href="/forgot-password"
             className="text-indigo-500 font-semibold hover:underline text-sm"
           >
             Forgot Password?
-          </a>
+          </Link>
         </div>
 
         <p className="mt-4 text-center text-gray-600 text-sm">
           Don't have an account?{" "}
-          <a
-            href="/register"
+          <Link
+            to="/register"
             className="text-indigo-500 font-semibold hover:underline"
           >
             Register now
-          </a>
+          </Link>{" "}
         </p>
       </div>
     </div>
